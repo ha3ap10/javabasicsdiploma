@@ -12,9 +12,9 @@ import java.net.URL;
 
 public class ConverterImgToText implements TextGraphicsConverter {
 
-    private int maxWidth;
-    private int maxHeight;
-    private double maxRatio;
+    private int maxWidth = 300;
+    private int maxHeight = 300;
+    private double maxRatio = 4;
     private float diffWidth;
     private float diffHeight;
     private int newWidth;
@@ -28,25 +28,23 @@ public class ConverterImgToText implements TextGraphicsConverter {
         int imageHeight = img.getHeight();
         double imageRatio = (double) imageWidth / imageHeight;
 
-        if (maxRatio != 0 && imageRatio > maxRatio) throw new BadImageSizeException(imageRatio, maxRatio);
+        if (imageRatio > maxRatio) throw new BadImageSizeException(imageRatio, maxRatio);
 
-        if (maxWidth != 0) {
-            diffWidth = (float) imageWidth / maxWidth;
-        }
+        setNewWidthHeight(imageWidth, imageHeight);
 
-        if (maxHeight != 0) {
-            diffHeight = (float) imageHeight / maxHeight;
-        }
+        return outputImage(img);
+    }
 
-        if (diffWidth != 0 && diffHeight != 0) {
-            float diff = Math.max(diffWidth, diffHeight);
-            newWidth = (int) (imageWidth / diff);
-            newHeight = (int) (imageHeight / diff);
-        } else {
-            newWidth = imageWidth;
-            newHeight = imageHeight;
-        }
+    public void setNewWidthHeight(int width, int height) {
+        diffWidth = (float) width / maxWidth;
+        diffHeight = (float) height / maxHeight;
 
+        float diff = Math.max(diffWidth, diffHeight);
+        newWidth = (int) (width / diff);
+        newHeight = (int) (height / diff);
+    }
+
+    public String outputImage(BufferedImage img) {
         Image scaledImage = img.getScaledInstance(newWidth, newHeight, BufferedImage.SCALE_SMOOTH);
 
         BufferedImage bwImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_BYTE_GRAY);

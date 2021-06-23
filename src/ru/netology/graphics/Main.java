@@ -22,6 +22,7 @@ public class Main {
         converter.setMaxWidth(200);
         converter.setMaxHeight(300);
 
+
 //        TextColorSchema colorSchema = new SymbolColorSchema();
 //        converter.setTextColorSchema(colorSchema);
 
